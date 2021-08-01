@@ -1,7 +1,7 @@
 require("dotenv").config();
 
 const express = require("express"), app = express(), bodyParser = require("body-parser"),
-      http = require("http"), PORT = 8080, IP = "0.0.0.0", // process.env.PORT
+      http = require("http"), PORT = process.env.PORT || 8080, IP = process.env.IP || "0.0.0.0",
       mongoose = require("mongoose"), methodOverride = require("method-override"),
       User = require("./models/user"), seedDB = require("./seeds"),
       passport = require("passport"), LocalStrategy = require("passport-local"),
