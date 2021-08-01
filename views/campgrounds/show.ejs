@@ -1,0 +1,134 @@
+<%- include("../partials/header") %>
+
+      <div class="row">
+        <div class="col-md-3">
+          <p class="lead"><%= campground.name %></p><!-- YelpCamp -->
+          <div class="list-group">
+            <li class="list-group-item active"><%= campground.location %></li>
+            <li class="list-group-item">&nbsp; Latitude : <%= campground.lat %></li>
+            <li class="list-group-item">Longitude: <%= campground.lng %></li>
+          </div>
+          <div id="map"></div>
+        </div> <!-- col-md-3 -->
+        <div class="col-md-9">
+          <!-- h1><%= campground.name %></h1 -->
+
+          <div class="card">
+            <img src="<%= campground.image %>" class="card-img-top" />
+            <div class="card-body" style="padding: 10px 0 6px;">
+              <h4 class="card-title float-right mb-0">$<%= campground.price %>/night</h4>
+              <h4 class="card-title mb-0"><%= campground.name %></h4>
+              <p class="card-text mb-0 pt-1 pb-1 float-right">
+                <em>Submitted By <a href="/users/<%= campground.author.id %>"><%= campground.author.username %></a>, <%= formatDistance(campground.createdAt, Date.now()) %></em>
+              </p>
+              <% if(currentUser && (currentUser.isAdmin || (campground.author && campground.author.id && 
+                campground.author.id.equals(currentUser._id)))){ %>
+                <div class="card-title mt-1 mb-1">
+                  <a class="btn btn-sm btn-info" href="/campgrounds/<%= campground._id %>/edit">Edit</a>
+                  <form action="/campgrounds/<%= campground._id %>?_method=DELETE" method="POST" class="delete-form">
+                    <button class="btn btn-sm btn-danger">Delete</button>
+                  </form>
+                </div>
+              <% } %><div class="clearfix"></div>
+              <hr style="margin: 0;" />
+              <div class="card-text"><%= campground.description %><!-- pt-0 -->
+                <!-- <% if(currentUser && campground.author && campground.author.id && (campground.author.id.equals(currentUser._id) || currentUser.isAdmin)){ %><br>
+                  <a class="btn btn-sm btn-info" href="/campgrounds/<%= campground._id %>/edit">Edit</a>
+                  <form action="/campgrounds/<%= campground._id %>?_method=DELETE" method="POST" class="delete-form">
+                    <button class="btn btn-sm btn-danger">Delete</button>
+                  </form>
+                <% } %> -->
+              </div>
+            </div>
+          </div><!-- br -->
+
+          <!-- div class="card">
+            <img src="<%= campground.image %>" class="card-img-top" />
+            <figcaption class="row figure-caption">
+              <h4 class="col-md-9"><%= campground.name %></h4>
+              <h4 class="col-md-3 text-right">$<%= campground.price %>/night</h4>
+            </figcaption>
+            <div class="card-text"><%= campground.description %><br>
+              <em>Submitted By <a href="/users/<%= campground.author.id %>"><%= campground.author.username %></a>, <%= formatDistance(campground.createdAt, Date.now()) %></em>
+              <% if(currentUser && campground.author && campground.author.id && (campground.author.id.equals(currentUser._id) || currentUser.isAdmin)){ %><br>
+                <a class="btn btn-sm btn-info" href="/campgrounds/<%= campground._id %>/edit">Edit</a>
+                <form action="/campgrounds/<%= campground._id %>?_method=DELETE" method="POST" class="delete-form">
+                  <button class="btn btn-sm btn-danger">Delete</button>
+                </form>
+              <% } %>
+            </div>
+          </div><br -->
+          
+          <div class="card mt-2 mb-2">
+            <div class="card-header" style="padding: 9px;">
+              <p class="text-right mb-0">
+                <a class="btn btn-success" href="/campgrounds/<%= campground._id %>/comments/new">Add New Comment</a>
+              </p>
+            </div>
+            <!-- hr -->
+            <div class="card-body" style="padding: 9px 9px 2px;">
+              <% for(var i = campground.comments.length-1; i >= 0; i--) { %>
+                <div class="card mb-2">
+                  <div class="card-body" style="padding: 9px;">
+                    <div class="float-right text-right ml-2 mb-2">
+                      <p class="mb-1"><%= formatDistance(campground.comments[i].createdAt, Date.now()) %></p>
+                      <div>
+                        <% if(currentUser && (campground.comments[i].author.id.equals(currentUser._id) || currentUser.isAdmin)){ %>
+                          <a class="btn btn-sm btn-info" href="/campgrounds/<%= campground._id %>/comments/<%= campground.comments[i]._id %>/edit">Edit</a>
+          <form action="/campgrounds/<%= campground._id %>/comments/<%= campground.comments[i]._id %>?_method=DELETE" method="POST" class="delete-form">
+            <button class="btn btn-sm btn-danger">Delete</button>
+          </form>
+                        <% } %><br>
+                      </div>
+                    </div>
+                    <p class="mb-1"><strong><%= campground.comments[i].author.username %></strong></p>
+                    <p class="mb-1"><%= campground.comments[i].text %></p>
+                  </div>
+                </div><!-- br -->
+
+                <!-- div class="row">
+                  <div class="col-md-6"><strong><%= campground.comments[i].author.username %></strong></div>
+                  <div class="col-md-6 text-right"><%= formatDistance(campground.comments[i].createdAt, Date.now()) %></div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6"><%= campground.comments[i].text %></div>
+                  <div class="col-md-6 text-right">
+                  <% if(currentUser && (campground.comments[i].author.id.equals(currentUser._id) || currentUser.isAdmin)){ %>
+                    <a class="btn btn-sm btn-info" href="/campgrounds/<%= campground._id %>/comments/<%= campground.comments[i]._id %>/edit">Edit</a>
+    <form action="/campgrounds/<%= campground._id %>/comments/<%= campground.comments[i]._id %>?_method=DELETE" method="POST" class="delete-form">
+      <button class="btn btn-sm btn-danger">Delete</button>
+    </form>
+                  <% } %><br>
+                  </div>
+                </div><br -->
+              <% } %>
+            </div>
+          </div> <!-- card -->
+
+        </div> <!-- col-md-9 -->
+      </div> <!-- row -->
+
+      <script>
+        function initMap() {
+          //const lat = <%= campground.lat %>, lng = <%= campground.lng %>;
+          const center = { lat: <%= campground.lat %>, lng: <%= campground.lng %> };
+          var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 8, center: center, scrollwheel: false
+          });
+          var contentString = `
+            <strong><%= campground.name %><br />
+            <%= campground.location %></strong>
+            <p><%= campground.description %>
+          `;
+          var infoWindow = new google.maps.InfoWindow({
+            content: contentString
+          });
+          var marker = new google.maps.Marker({ position: center, map: map });
+          marker.addListener('click', function() {
+            infoWindow.open(map, marker);
+          });
+        }
+      </script>
+      <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDrOuDycmwoNIdYMntA_Sx0n13d91HUrzc&callback=initMap"></script>
+
+<%- include("../partials/footer") %>

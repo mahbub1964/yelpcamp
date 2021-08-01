@@ -1,0 +1,32 @@
+{
+  "name": "yelpcamp",
+  "version": "1.0.0",
+  "description": "YelpCamp - a campgrounds listing app",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mahbubur Rahman",
+  "license": "ISC",
+  "dependencies": {
+    "@google-cloud/storage": "^5.8.5",
+    "async": "^3.2.0",
+    "aws-sdk": "^2.935.0",
+    "body-parser": "^1.19.0",
+    "cloudinary": "^1.26.1",
+    "connect-flash": "^0.1.1",
+    "date-fns": "^2.22.1",
+    "dotenv": "^10.0.0",
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "express-session": "^1.17.2",
+    "method-override": "^3.0.0",
+    "mongoose": "^5.12.10",
+    "multer": "^1.4.2",
+    "node-geocoder": "^3.27.0",
+    "nodemailer": "^6.6.1",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0",
+    "passport-local-mongoose": "^6.1.0"
+  }
+}

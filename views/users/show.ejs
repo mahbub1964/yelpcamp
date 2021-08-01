@@ -1,0 +1,40 @@
+<%- include("../partials/header") %>
+
+    <div class="row">
+      <div class="col-md-4">
+        <h2><%= user.firstName + " " + user.lastName %></h2>
+        <div class="card">
+          <img class="card-img-top" src="<%= user.avatar %>" alt="user profile image">
+          <figcaption class="figure-caption">
+            <%= user.username %>: <a href="mailto:<%= user.email %>"><%= user.email %></a>
+          </figcaption>
+        </div><!-- card -->
+        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+      </div><!-- col-md-4 -->
+      <div class="col-md-8">
+        <h3><%= user.username %>'s Campgrounds:</h3>
+        <ul>
+          <% for(var i = campgrounds.length-1; i >= 0; i--){ %>
+            <li><a href="/campgrounds/<%= campgrounds[i]._id %>"><%= campgrounds[i].name %></a></li>
+          <% } %>
+        </ul><br>
+        <% if(user.followers && user.followers.length > 0){ %>
+          <h4><%= user.username %>'s Followers:</h3>
+          <ul>
+          <% for(const follower of user.followers){ %>
+            <li><%= follower.username %></li>
+          <% } %>
+          </ul>
+        <% } %>
+        <% if(currentUser && currentUser.email !== user.email){ %>
+          <% if(following){ %>
+            <a class="btn btn-lg btn-primary" href="/unfollow/<%= user.id %>">Stop following <%= user.username %></a>
+          <% } else { %>
+            <a class="btn btn-lg btn-primary" href="/follow/<%= user.id %>">Follow <%= user.username %></a>
+          <% } %>
+        <% } %>
+      </div><!-- col-md-8 -->
+    </div>
+
+<%- include("../partials/footer") %>

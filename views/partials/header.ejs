@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>YelpCamp</title>
+    <link rel="stylesheet" href="/bootstrap-4-6-0.min.css">
+    <link rel="stylesheet" href="/stylesheets/main.css">
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #cfd4d886; margin: 0 0 10px">
+      <a class="navbar-brand" href="/">YelpCamp</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"><span class="navbar-toggler-icon"></span></button>
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item<%= (typeof page !== 'undefined' && page === 'campgrounds' ? ' active' : '') %>">
+            <a class="nav-link" href="/campgrounds">Home</a>
+          </li>
+        </ul>
+        <ul class="navbar-nav ml-auto"><!-- mt-2 mt-lg-0 -->
+          <% if(!currentUser) { %>
+          <li class="nav-item"><!-- active -->
+            <a class="nav-link" href="/login">Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/register">Sign Up</a>
+          </li>
+          <% } else { %>
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="notificationsDropdown" data-toggle="dropdown" aria-haspopup="true"
+              aria-expanded="false">Notifications <span class="badge"><%= notifications.length %></span>
+            </a>
+            <div class="dropdown-menu" aria-labelledby="notificationsDropdown">
+              <a class="dropdown-item" href="/notifications">View past notifications</a>
+              <% notifications.forEach((notification) => { %>
+                <a class="dropdown-item" href="/notifications/<%= notification.id %>">
+                  <%= notification.username %> created a new campground
+                </a>
+              <% }); %>
+            </div>
+          </li>
+            
+          <li class="nav-item">
+            <span class="nav-link">Signed In As <%= currentUser.username %></span>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/logout">Logout</a>
+          </li>
+          <% } %>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="container">
+      <% if(error && error.length > 0){ %>
+        <div class="alert alert-danger" role="alert"><%= error %></div>
+      <% } %>
+      <% if(success && success.length > 0){ %>
+        <div class="alert alert-success" role="alert"><%= success %></div>
+      <% } %>
+    </div>
+    <div class="container">

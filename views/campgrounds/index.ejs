@@ -1,0 +1,48 @@
+<%- include("../partials/header") %>
+
+      <% if(currentUser && currentUser.isAdmin){ %>
+        <h1>You're an admin!</h1>
+      <% } %>
+      <header class="jumbotron">
+        <div class="container">
+          <h1>Welcome to YelpCamp!</h1>
+          <p>View our hand-picked campgrounds from all over the world</p>
+          <p><a class="btn btn-primary btn-lg" href="/campgrounds/new">Add New Campground</a></p>
+          <p>
+            <form action="/campgrounds" method="GET" class="form-inline">
+              <div class="form-group">
+                <input type="text" name="search" placeholder="Campground search..." class="form-control">
+                <input type="submit" value="Search" class="btn btn-light" style="border-style: solid; border-color: #9f9f9f;">
+              </div>
+            </form>
+          </p>
+        </div>
+      </header>
+
+      <div class="row">
+        <div class="col-lg-12">
+          <h3><%= heading %></h3>
+        </div>
+      </div>
+      <div class="row text-center" id="campground-grid">
+        <% for(var i = campgrounds.length-1; i >= 0; i--) { %>
+          <!-- div class="col-md-3 col-sm-6">
+            <figure class="figure">
+              <img src="<%= campgrounds[i].image %>" class="figure-img img-thumbnail" />
+              <figcaption class="figure-caption"><h4><%= campgrounds[i].name %></h4></figcaption>
+              <p><a href="/campgrounds/<%= campgrounds[i]._id %>" class="btn btn-primary">More Info</a></p>
+            </figure>
+          </div -->
+          <div class="col-lg-3 col-md-4 col-sm-6 mb-3"><!-- mb-4 -->
+            <div class="card"><!-- style="margin-bottom: 8px;" width: 16rem; -->
+              <img src="<%= campgrounds[i].image %>" class="card-img-top" alt="<%= campgrounds[i].name %>" style="margin-bottom: 0;" />
+              <div class="card-body" style="padding: 10px 0 6px;">
+                <h4 class="card-title" style="color:#6f6f6f; margin: 0 0 6px;"><%= campgrounds[i].name %></h4>
+                <a href="/campgrounds/<%= campgrounds[i]._id %>" class="btn btn-primary">More Info</a>
+              </div>
+            </div>
+          </div>
+        <% } %>
+      </div>
+
+<%- include("../partials/footer") %>

@@ -1,0 +1,14 @@
+<%- include("../partials/header") %>
+
+    <h1>All Notifications</h1>
+    <ul>
+      <% for(const notification of allNotifications){ %>
+        <li><a href="/notifications/<%= notification.id %>">
+          <% if(!notification.isRead){ %><strong><% } %>
+            <%= notification.username %> has created a new campground
+          <% if(!notification.isRead){ %></strong><% } %>
+        </a></li>
+      <% } %>
+    </ul>
+
+<%- include("../partials/footer") %>
