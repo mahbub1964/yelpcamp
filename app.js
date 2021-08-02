@@ -12,7 +12,8 @@ const campgroundRoutes = require("./routes/campgrounds"),
       commentRoutes = require("./routes/comments"), indexRoutes = require("./routes/index");
 
 //APP SETUP
-mongoose.connect("mongodb://localhost/yelp_camp", { useNewUrlParser: true, useUnifiedTopology: true //:27017
+//mongoose.connect("mongodb://localhost/yelp_camp", { useNewUrlParser: true, useUnifiedTopology: true //:27017
+mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true, useUnifiedTopology: true
 , useFindAndModify: false, useCreateIndex: true }).then(() => console.log("Database connected"))
 .catch(err => console.log(`Database connection error ${err.message}`)); //seedDB(); //seed the database
 app.set("view engine", "ejs");
