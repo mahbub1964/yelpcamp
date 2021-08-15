@@ -49,7 +49,7 @@ router.get("/:id", (req, res) => { console.log("GET /campgrounds/" + req.params.
       req.flash("error", "Campground not found"); res.redirect("back");
     } else { //render show template with that campground
       res.render("campgrounds/show", {campground: campground});
-      console.log("Looking for", campground.id, campground.name, "in all notifications:");
+      //console.log("Looking for", campground.id, campground.name, "in all notifications:");
       //const qry = Notification.find({ campgroundId: campground.id });
       //qry.exec((err, notifications) => console.log("Notifications:", notifications, err));
       const agg = User.aggregate([ { $project: { salt: 0, hash: 0 } },
@@ -58,7 +58,7 @@ router.get("/:id", (req, res) => { console.log("GET /campgrounds/" + req.params.
           localField: "notifications", foreignField: "_id", as: "notification"
         } }, { $match: { "notification.campgroundId": campground.id } }
       ]);
-      agg.exec((err, users) => console.log("Users:", users, users.length, err));
+      //agg.exec((err, users) => console.log("Users:", users, users.length, err));
     }
   });
   //res.send("THIS WILL BE THE SHOW PAGE ONEDAY!");
@@ -106,18 +106,18 @@ router.delete("/:id", middleware.checkCampgroundOwnership, (req, res) => {
       console.log("router.delete: Successfully deleted campground", campground.name);
       req.flash("success", "Successfully Deleted!"); res.redirect("/campgrounds");
       const qry = Notification.find({ campgroundId: campground.id });
-      qry.exec((err, notifications) => { console.log("Notifications:", notifications, err);
-        for(const notification of notifications) { console.log("Removing Notification:", notification);
-          notification.remove((err, notification) => { console.log("Removed notification:", notification);
+      qry.exec((err, notifications) => { //console.log("Notifications:", notifications, err);
+        for(const notification of notifications) { //console.log("Removing Notification:", notification);
+          notification.remove((err, notification) => { //console.log("Removed notification:", notification);
             const agg = User.aggregate([ { $project: { salt: 0, hash: 0 } },
               { $unwind: "$notifications" },
               { $match: { notifications: notification._id } }
             ]);
             agg.exec((err, users) => { //console.log("Notified Users:", users, users.length, err);
               for(const user of users) { //console.log("Notified User:", user);
-                User.findById(user._id, (err, user) => { console.log("Notified User:", user);
+                User.findById(user._id, (err, user) => { //console.log("Notified User:", user);
                   user.notifications.splice(user.notifications.indexOf(notification.id), 1); user.save();
-                  console.log("Notification removed from user:", user);
+                  //console.log("Notification removed from user:", user);
                 });
             } });
           });

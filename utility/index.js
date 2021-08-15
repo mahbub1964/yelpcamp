@@ -1,13 +1,20 @@
 const Campground = require("../models/campground"), Comment = require("../models/comment"),
       cloudinary = require("cloudinary").v2, geocoder = require("node-geocoder")({ // httpAdapter: "https",
         provider: "google", apiKey: process.env.GEOCODER_API_KEY, formatter: null
-      }), fs = require("fs"), {Storage} = require("@google-cloud/storage"), gcstorage = new Storage(),
+      }), fs = require("fs"), {Storage} = require("@google-cloud/storage"), 
+      gcstorage = new Storage({ projectId: process.env.GCS_PROJECT_ID, credentials: { 
+        client_email:process.env.GCS_SERVICE_AC, //scopes:'https://www.googleapis.com/auth/cloud-platform',
+        private_key: process.env.GCS_SECRET_KEY
+      }}),
       s3 = new (require("aws-sdk/clients/s3"))({apiVersion: '2006-03-01', region: process.env.AWS_REGION}),
       User = require("../models/user"), Notification = require("../models/notification");
 
 cloudinary.config({ cloud_name: process.env.CLOUDINARY_CLOUD_NAME, secure: true,
   api_key: process.env.CLOUDINARY_API_KEY, api_secret: process.env.CLOUDINARY_API_SECRET
 });
+
+console.log("Testing GCS credentials"); // testing GCS credentials
+gcstorage.getBuckets((err,buckets) => console.log("utility.index: GCS buckets -",buckets.length,", Error -",err));
 
 // all utility functions go here
 const utilityObj = {};
@@ -16,7 +23,7 @@ const utilityObj = {};
 
 utilityObj.deleteCampground = async function(campground, callback) {
   if(campground.comments.length) {
-    while(comment = campground.comments.pop()) { console.log("utility.deleteCampground: Deleting comment", comment);
+    while(comment = campground.comments.pop()) { //console.log("utility.deleteCampground: Deleting comment", comment);
       Comment.findByIdAndDelete(comment, (err, comment) => { if(err) return console.log("utility.deleteCampground: Error", err);
         if(comment) console.log("utility.deleteCampground: Deleted comment '"+comment.text+"' by "+comment.author.username);
       });
