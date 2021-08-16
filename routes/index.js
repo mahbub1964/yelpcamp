@@ -50,10 +50,10 @@ router.get("/logout", (req, res) => { console.log("GET /logout");
 });
 
 // forgot password
-router.get("/forgot", (req, res) => {
+router.get("/forgot", (req, res) => { console.log("GET /forgot");
   res.render("forgot");
 });
-router.post("/forgot", (req, res, next) => {
+router.post("/forgot", (req, res, next) => { console.log("POST /forgot");
   async.waterfall([
     function(done) { crypto.randomBytes(20, (err, buf) => {
       const token = buf.toString("hex"); console.log("token: " + token);
@@ -63,6 +63,7 @@ router.post("/forgot", (req, res, next) => {
       if(!user) { req.flash("error", "No account with that email address exists.");
         return res.redirect("/forgot");
       } user.resetPasswordToken = token; user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+      console.log("Date.now():", Date.now(), "resetPasswordExpires:", user.resetPasswordExpires);
       user.save((err, user) => { done(err, token, user); });
     }); },
     function(token, user, done) {
@@ -90,20 +91,24 @@ router.post("/forgot", (req, res, next) => {
 });
 
 // reset password
-router.get("/reset/:token", (req, res) => {
-  User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: {$gt: Date.now()} }, (err, user) => {
-    if(!user) {
+router.get("/reset/:token", (req, res) => { console.log("GET /reset/" + req.params.token);
+  //User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: {$gt: Date.now()} }, (err, user) => {
+  User.findOne({ resetPasswordToken: req.params.token }, (err, user) => {
+    console.log("Date.now():", Date.now(), "user:", user);
+    if(!user || user.resetPasswordExpires < Date.now()) {
       req.flash("error", "Password reset token is invalid or has expired.");
       return res.redirect("/forgot");
     }
     res.render("reset", {token: req.params.token});
   });
 });
-router.post("/reset/:token", (req, res) => {
+router.post("/reset/:token", (req, res) => { console.log("POST /reset/" + req.params.token);
   async.waterfall([
     function(done) {
-      User.findOne({ resetPasswordToken: req.params.token, resetPasswordToken: {$gt: Date.now()} }, (err, user) => {
-        if(!user) {
+      //User.findOne({ resetPasswordToken: req.params.token, resetPasswordToken: {$gt: Date.now()} }, (err, user) => {
+      User.findOne({ resetPasswordToken: req.params.token }, (err, user) => {
+        console.log("Date.now():", Date.now(), "user:", user);
+        if(!user || user.resetPasswordExpires < Date.now()) {
           req.flash("error", "Password reset token is invalid or has expired."); return res.redirect("back");
         }
         if(req.body.password === req.body.confirm) { user.setPassword(req.body.password, (err) => {

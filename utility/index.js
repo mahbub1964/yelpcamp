@@ -1,14 +1,8 @@
 const Campground = require("../models/campground"), Comment = require("../models/comment"),
       cloudinary = require("cloudinary").v2, geocoder = require("node-geocoder")({ // httpAdapter: "https",
         provider: "google", apiKey: process.env.GEOCODER_API_KEY, formatter: null
-      }), fs = require("fs"), {Storage} = require("@google-cloud/storage"), 
-      /*gcstorage = new Storage({ projectId: process.env.GCS_PROJECT_ID, credentials: { 
-        client_email:process.env.GCS_SERVICE_AC, //scopes:'https://www.googleapis.com/auth/cloud-platform',
-        private_key: process.env.GCS_SECRET_KEY
-      }}),*/
-      gcstorage = new Storage({ 
-        projectId: process.env.GCS_PROJECT_ID, 
-        credentials: JSON.parse(process.env.GCS_CREDENTIALS)
+      }), fs = require("fs"), {Storage} = require("@google-cloud/storage"), gcstorage = new Storage({ 
+        projectId: process.env.GCS_PROJECT_ID, credentials: JSON.parse(process.env.GCS_CREDENTIALS)
       }),
       s3 = new (require("aws-sdk/clients/s3"))({apiVersion: '2006-03-01', region: process.env.AWS_REGION}),
       User = require("../models/user"), Notification = require("../models/notification");
