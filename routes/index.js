@@ -54,6 +54,7 @@ router.get("/forgot", (req, res) => { console.log("GET /forgot");
   res.render("forgot");
 });
 router.post("/forgot", (req, res, next) => { console.log("POST /forgot");
+  console.log("Email:", req.body.email);
   async.waterfall([
     function(done) { crypto.randomBytes(20, (err, buf) => {
       const token = buf.toString("hex"); console.log("token: " + token);

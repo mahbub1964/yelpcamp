@@ -9,11 +9,11 @@ const express = require("express"), app = express(), bodyParser = require("body-
       //passportLocalMongoose = require("passport-local-mongoose");
 
 const campgroundRoutes = require("./routes/campgrounds"),
-      commentRoutes = require("./routes/comments"), indexRoutes = require("./routes/index");
+      commentRoutes = require("./routes/comments"), indexRoutes = require("./routes/index"),
+      databaseUrl = process.env.DATABASE_URL || "mongodb://localhost/yelp_camp"; //:27017
 
 //APP SETUP
-//mongoose.connect("mongodb://localhost/yelp_camp", { useNewUrlParser: true, useUnifiedTopology: true //:27017
-mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true, useUnifiedTopology: true
+mongoose.connect(databaseUrl, { useNewUrlParser: true, useUnifiedTopology: true
 , useFindAndModify: false, useCreateIndex: true }).then(() => console.log("Database connected"))
 .catch(err => console.log(`Database connection error ${err.message}`)); //seedDB(); //seed the database
 app.set("view engine", "ejs");
